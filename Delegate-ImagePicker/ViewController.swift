@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet var imgView: UIImageView!
 
@@ -21,7 +21,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // 이미지 피커 컨트롤러 실행
         self.present(picker, animated: false)
     }
-    
+}
+
+// MARK:- 이미지 피커 컨트롤러 델리게이트 메소드
+extension ViewController: UIImagePickerControllerDelegate {
     // 이미지 피커에서 이미지를 선택하지 않고 취소했을 때 호출되는 메소드
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         // 이미지 피커 컨트롤러 창 닫기
@@ -49,3 +52,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 }
 
+// MARK:- 내비게이션 컨트롤러 델리게이트 메소드
+extension ViewController: UINavigationControllerDelegate {}
+
+// MARK:- 텍스트필드 델리게이트 메소드
+extension ViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("사진 검색 시작! 추억을 찾아보아요!")
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("검색이 끝났군요! 마음에 드나요?")
+    }
+}
