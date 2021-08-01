@@ -16,9 +16,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary // 이미지 소스로 사진 라이브러리 선택
         picker.allowsEditing = true // 이미지 편집 기능 On
-        
-        // 델리게이트 지정
-        picker.delegate = self
+        picker.delegate = self // 델리게이트 지정
         
         // 이미지 피커 컨트롤러 실행
         self.present(picker, animated: false)
@@ -42,7 +40,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     // 이미지 피커에서 이미지를 선택했을 때 호출되는 메소드
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
+        // 이미지 피커 컨트롤러 창 닫기
+        picker.dismiss(animated: false) { () in
+            // 이미지를 이미지 뷰에 표시
+            let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            self.imgView.image = img
+        }
     }
 }
 
