@@ -6,23 +6,54 @@
 //
 
 import UIKit
+import PhotosUI
 
 class ViewController: UIViewController {
 
     @IBOutlet var imgView: UIImageView!
 
     @IBAction func pick(_ sender: Any) {
-        // 이미지 피커 컨트롤러 인스턴스 생성
-        let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary // 이미지 소스로 사진 라이브러리 선택
-        picker.allowsEditing = true // 이미지 편집 기능 On
-        picker.delegate = self // 델리게이트 지정
+        // MARK:- 이미지 피커 인스턴스
+//        // 이미지 피커 컨트롤러 인스턴스 생성
+//        let picker = UIImagePickerController()
+//        picker.sourceType = .photoLibrary // 이미지 소스로 사진 라이브러리 선택
+//        picker.allowsEditing = true // 이미지 편집 기능 On
+//        picker.delegate = self // 델리게이트 지정
+//
+//        // 이미지 피커 컨트롤러 실행
+//        self.present(picker, animated: false)
         
-        // 이미지 피커 컨트롤러 실행
-        self.present(picker, animated: false)
+        // MARK:- PH 이미지 피커 인스턴스
+        let configuration = PHPickerConfiguration()
+        let phPicker = PHPickerViewController(configuration: configuration)
+        phPicker.delegate = self
+        
+        self.present(phPicker, animated: true)
     }
 }
 
+// MARK:- PH 피커 컨트롤러 델리게이트 메소드
+extension ViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        
+        picker.dismiss(animated: false)
+        
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+                    DispatchQueue.main.async {
+                        self.imgView.image = image as? UIImage
+                    }
+                }
+        } else {
+            
+        }
+    }
+}
+
+/*
 // MARK:- 이미지 피커 컨트롤러 델리게이트 메소드
 extension ViewController: UIImagePickerControllerDelegate {
     // 이미지 피커에서 이미지를 선택하지 않고 취소했을 때 호출되는 메소드
@@ -51,6 +82,7 @@ extension ViewController: UIImagePickerControllerDelegate {
         }
     }
 }
+ */
 
 // MARK:- 내비게이션 컨트롤러 델리게이트 메소드
 extension ViewController: UINavigationControllerDelegate {}
